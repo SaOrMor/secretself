@@ -9,19 +9,27 @@ const MongoStore = require('connect-mongo')(session);
 const cors = require('cors');
 require('dotenv').config();
 
-const authRouter = require('./routes/auth.router');
-const postRouter = require('./routes/post.router');
-
 
 // MONGOOSE CONNECTION
 mongoose
   .connect(process.env.MONGODB_SAL, {
     keepAlive: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+
   })
   .then(() => console.log(`Connected to database`))
   .catch((err) => console.error(err));
+
+  const postModel = require('./models/post.model');
+  const commentsModel = require('./models/comments.model');
+  const userModel = require('./models/user.model');
+  
+  const authRouter = require('./routes/auth.router');
+  const postRouter = require('./routes/post.router');
+  
+  
+
 
 
 // EXPRESS SERVER INSTANCE

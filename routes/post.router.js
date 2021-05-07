@@ -1,10 +1,13 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const Post = require("../models/post.model");
+const Comment = require("../models/comments.model");
+const User = require("../models/user.model");
+
+
 const router = express.Router();
 const createError = require("http-errors");
 
-const Post = require("../models/post.model");
-const Comment = require("../models/comments.model")
-const User = require("../models/user.model");
 
 
 const {
@@ -13,16 +16,9 @@ const {
     isComm,
 } = require("../helpers/middlewares");
 
-const { json } = require("body-parser");
-const { Router } = require("express");
-const { route } = require("../app");
-
-
-
-
 // api/post      POST        create new post
 
-router.post('/post', isLoggedIn, (req, res, next) => {
+router.post('/post', isLoggedIn,  (req, res, next) => {
 
 // get valus to create the post
 
@@ -32,12 +28,10 @@ const currentUser = req.session.currentUser;
 
 // create the post
 
-Post.create({ text, image, user: currentUser}) //comments: []
+Post.create({ text, image, user: currentUser}) //comments: [] maybe currentUser should be currentUser._id
 .then((createdPost) => {
     res.status(201).json(createdPost)
-
 // update the user model post key with the created post Id;
-
 
 const pr = User.findByIdAndUpdate(currentUser._id, {$push: {post: createdPost._id} })
 return pr
@@ -57,13 +51,15 @@ return pr
 // this.state.text ? this.state.text : null, because the value is not available now
 // you have to add a function that check if you are the one who created it
 
-router.put('/post/:id', isLoggedIn, IsUser,(req, res, next) => {
+router.put('/post/:id', isLoggedIn,(req, res, next) => {
 
 const {id} = req.params;
 
 const {text, image} = req.body;
 
-Post.findByIdAndUpdate(id, {text,  image})
+console.log("req.body", req.body)
+
+Post.findByIdAndUpdate(id, {text,  image}, {new: true})
 
 
 .then((editedPost) => {
@@ -80,14 +76,17 @@ Post.findByIdAndUpdate(id, {text,  image})
 // you have to add a function that check if you are the one who created it
 
 
-router.get('/post/:id',  (req, res, next) => {
+router.get('/post/:id', isLoggedIn, (req, res, next) => {
 
     const {id} = req.params;
 
-    Post.findById(id)
+     Post.findById(id)
+     .populate('comments')
     .then((foundPost) => {
         res.status(200).json(foundPost)
+
     }).catch((err) => {
+        console.log(err)
         res.status(500).json(err)
     })
 })
@@ -97,7 +96,7 @@ router.get('/post/:id',  (req, res, next) => {
 // check the json that you are sending here, it's strange;
 
 
-router.delete('/post/:id', isLoggedIn, IsUser, (req, res, next) => {
+router.delete('/post/:id',isLoggedIn, (req, res, next) => {
 
 const {id} = req.params;
 
@@ -193,7 +192,7 @@ router.post('/post/:id/comment', isLoggedIn, (req, res, next) => {
         
         if (foundComm.user == currentUser._id) {
 
-            Comment.findByIdAndUpdate(id, {cText, image})
+            Comment.findByIdAndUpdate(id, {cText, image}, {new: true})
   
               .then((updComm) => { res.status(200).json(updComm) })
   

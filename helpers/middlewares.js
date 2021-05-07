@@ -5,6 +5,7 @@ const Comment = require("../models/comments.model")
 
 exports.isLoggedIn = (req, res, next) => {
   // Check if user request has a cookie/session.
+  
   if (req.session.currentUser) next();
   else next(createError(401));
 };
@@ -19,6 +20,8 @@ exports.isNotLoggedIn = (req, res, next) => {
 
 exports.IsUser = (req, res, next) => {
   // check if the current user is the same as the one who created the post
+  console.log("typeof req.session.currentUser._id",typeof req.session.currentUser._id)
+  console.log("typeof Post.user", typeof Post.user)
   if ( req.session.currentUser._id === Post.user) next();
   else next(createError(401));
 };

@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const Comment = require("./comments.model");
-const Post = require("./post.model")
 
 const userSchema = new Schema({
   email: String,
   password: String,
-  post: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-  comment: [{ type: Schema.Types.ObjectId, ref: "Comment" }]
+  post: [{ type: Schema.Types.ObjectId, ref: "post" }],
+  comment: [{ type: Schema.Types.ObjectId, ref: "comment" }]
 }, {
   timestamps: {
     createdAt: 'created_at',
