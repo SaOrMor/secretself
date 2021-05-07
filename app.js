@@ -39,7 +39,11 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: [process.env.PUBLIC_DOMAIN],
+    origin: [
+      process.env.PUBLIC_DOMAIN,
+      "https://yoursecretself.herokuapp.com",
+      "http://yoursecretself.herokuapp.com",
+    ],
   }),
 );
 
@@ -71,6 +75,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', authRouter);
 app.use('/api', postRouter);
 
+// route for serving react app (index.html)
+
+app.use((req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+})
 
 
 // ERROR HANDLING
