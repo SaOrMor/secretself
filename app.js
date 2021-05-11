@@ -12,7 +12,7 @@ require('dotenv').config();
 
 // MONGOOSE CONNECTION
 mongoose
-  .connect(process.env.MONGODB_SAL, {
+  .connect(process.env.MONGODB_URI, {
     keepAlive: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
