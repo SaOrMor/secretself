@@ -55,7 +55,7 @@ app.use(
       mongooseConnection: mongoose.connection,
       ttl: 30 * 24 * 60 * 60, // 30 days
     }),
-    secret: "diunwriunfuierifbhru3498893", //process.env.SECRET_SESSION,
+    secret: process.env.SECRET_SESSION, // "diunwriunfuierifbhru3498893"
     resave: true,
     saveUninitialized: true,
     cookie: {
