@@ -141,12 +141,11 @@ router.post('/post/:id/comment', isLoggedIn, (req, res, next) => {
         res.status(201).json(createdComment)
     // PUSH ID COMMENT TO POST.COMMENT
 
-      const pr = Post.findByIdAndUpdate(id, {$push: {comments: createdComment._id} })
-      return pr;
+      Post.findByIdAndUpdate(id, {$push: {comments: createdComment._id} }).then((pr)=>{
+          console.log("pr", pr)
+      }).catch((err) => {console.log("findByIdAndUpdate error")})
      
      
-    }).then(() => {
-        console.log("sebding comment json to db")
     }).catch((err) => {
         res.status(500).json(err)
 
