@@ -40,6 +40,7 @@ app.use(
   cors({
     credentials: true,
     origin: [
+      'http://localhost:3000',
       process.env.PUBLIC_DOMAIN,
       "https://yoursecretself.herokuapp.com",
       "http://yoursecretself.herokuapp.com",
@@ -55,7 +56,7 @@ app.use(
       mongooseConnection: mongoose.connection,
       ttl: 30 * 24 * 60 * 60, // 30 days
     }),
-    secret: process.env.SECRET_SESSION, // "diunwriunfuierifbhru3498893"
+    secret: process.env.SECRET_SESSION, 
     resave: true,
     saveUninitialized: true,
     cookie: {

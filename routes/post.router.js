@@ -145,8 +145,12 @@ router.post('/post/:id/comment', isLoggedIn, (req, res, next) => {
       return pr;
      
      
+    }).then(() => {
+        console.log("sebding comment json to db")
     }).catch((err) => {
         res.status(500).json(err)
+
+
     })
     })
 
