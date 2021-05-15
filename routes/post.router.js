@@ -128,15 +128,15 @@ router.get('/post', (req, res, next) => {
 
 
 
-router.post('/post/:id/comment', isLoggedIn, (req, res, next) => {
+ router.post('/post/comments/:id', (req, res, next) => {
 
     const currentUser = req.session.currentUser;
     const {id} = req.params;
-    const {cText, date} = req.body;
+    const {cText} = req.body;
     
 
     //CREATE COMMENT
-    Comment.create({cText, date, post: id, user: currentUser})
+    Comment.create({cText, post: id, user: currentUser})
     .then(( createdComment) => {
         res.status(201).json(createdComment)
     // PUSH ID COMMENT TO POST.COMMENT
@@ -151,7 +151,7 @@ router.post('/post/:id/comment', isLoggedIn, (req, res, next) => {
 
 
     })
-    })
+    }) 
 
 
 // api/post/:id/comments/:id          PUT      edit a comment
